@@ -13,6 +13,8 @@ public class Citation {
 
     /**
      * @return the cpaid
+     * this boolean function is used depending on whether the ticket is paid or not
+     * if ticket is paid, cpaid = true, if ticket is unpaid cpaid=false
      */
     public Boolean getCpaid() {
         return cpaid;
@@ -20,6 +22,7 @@ public class Citation {
 
     /**
      * @param cpaid the cpaid to set
+     * 
      */
     public void setCpaid(Boolean cpaid) {
         this.cpaid = cpaid;
@@ -233,7 +236,10 @@ public class Citation {
     
     
     //Constructer for TicketClass
-    public Citation(int ticketnumber,String CarMake,String CarModel,String CarYear,String PermitNum,String LicenseNum, String State, String Color, String ViolationType, String Date, String Time, String Issuer, String Location,Boolean cpaid) {
+    public Citation(int ticketnumber,String CarMake,String CarModel,String CarYear,String PermitNum,
+                    String LicenseNum, String State, String Color, String ViolationType, String Date, 
+                    String Time, String Issuer, String Location,Boolean cpaid) 
+    {
         this.ticketnumber = ticketnumber;
         this.CarMake = CarMake;
         this.CarModel = CarModel;

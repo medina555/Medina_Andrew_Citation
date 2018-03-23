@@ -8,6 +8,8 @@ package MVC;
 import CITATIONDATA.Citation;
 import CITATIONDATA.CitationDataModel;
 import GUI.centerGUI;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -62,6 +64,7 @@ public class CitationController {
              	CitationDataModel.setCurrentUser(currentCit);
                 
 		centerGUI.clearFields();
+                CitationDataModel.storeTicketObject(currentCit);
                 
     
          }
@@ -98,6 +101,54 @@ public class CitationController {
              }
                 
         );
+                
+                
+                    centerGUI.getPrintAllBTN().setOnAction(
+             new EventHandler <ActionEvent>()
+             {
+                 @Override
+                 public void handle(ActionEvent event)
+                 {
+                     centerGUI.myLabel.clear();
+                
+                    ArrayList<Citation> citlist1 = CitationDataModel.getCitList();
+	                       for(int i = 0 ; i< citlist1.size();i++){
+   	
+                                centerGUI.myLabel.appendText(  "Ticket Number:" + (i +1) +
+                                            "Vehicle Make: " +citlist1.get(i).getCarMake() +"\n" +
+                                                "Vehicle Model: " +citlist1.get(i).getCarModel() +"\n"+
+                                                "Vehicle Year: " +citlist1.get(i).getCarYear()+"\n"+
+                                       
+                                                "Permit Number: " +citlist1.get(i).getPermitNum()+"\n"+ 
+                                                "License Plate Number: " +citlist1.get(i).getLicenseNum()+"\n"+
+                                                
+                                                "Vehicle State: " +citlist1.get(i).getState()+"\n"+
+                                                "Vehicle Color: " +citlist1.get(i).getColor()+"\n"+
+                                                "Date of Citation: " +citlist1.get(i).getDate()+"\n"+
+                                                "Time of Citation: " +citlist1.get(i).getTime()+"\n"+
+                                                "Issuer of Citation: " +citlist1.get(i).getIssuer()+"\n"+
+                                                "Location of Citation: " +citlist1.get(i).getLocation()+"\n"+
+                                                "Violation: " +citlist1.get(i).getViolationType()+"\n"+
+                                                 centerGUI.cStatus(citlist1.get(i).getCpaid()) +"\n" );
+           
+                                        }   
+                
+                
+                 }
+             }
+                    );
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
            
           centerGUI.getExitBtn().setOnAction(e -> Platform.exit());   
            
@@ -254,10 +305,155 @@ public class CitationController {
           
           
           
+          	centerGUI.getStoreallBTN().setOnAction(
+			new EventHandler<ActionEvent>()
+			{
+			@Override
+			public void handle(ActionEvent event) 
+			{
+			 //set the fields
+			ArrayList<Citation> clist = CitationDataModel.getCitList();
+			      System.out.println("it worked");
+			CitationDataModel.storeticketObjects(clist);
+			}
+				
+			}
+
+		);
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                		centerGUI.getReadBTN().setOnAction(
+			new EventHandler<ActionEvent>()
+			{
+			@Override
+			public void handle(ActionEvent event) 
+			{
+			 //set the fields
+			int count = 0;      
+                         String alldata = "";
+	
+		           		try {
+	FileReader in= new FileReader("tickets.dat");
+       BufferedReader br = new BufferedReader(in);
+       
+  String line;
+ 
+
+     while((line = br.readLine()) != null){
+      String tn = br.readLine();
+      int ticketnumber = Integer.parseInt(tn);//ticket number for citation
+          br.readLine();
+        
+     String PermitNum =br.readLine();  //the permit number of the vehicle (if they have one)
+      br.readLine();
+     
+      String CarMake = br.readLine();  // the make of the vehicle
+       br.readLine();
+      String CarModel = br.readLine();  // the model of the vehicle
+       br.readLine();
+      String CarYear = br.readLine(); 
+      br.readLine();
+      // the year of the vehicle
+     String LicenseNum = br.readLine();
+        br.readLine();//the licenseplate number of the vehicle
+     String State = br.readLine();
+     br.readLine();// the state that the licenseplate belongs to
+     String Color = br.readLine();
+     br.readLine();// the color of the vehicle
+     String ViolationType = br.readLine();
+     br.readLine();//the violation type that occured 
+     String Date = br.readLine();
+     br.readLine();
+     String Time = br.readLine();
+     br.readLine();
+     String Issuer = br.readLine();
+     br.readLine();
+     String Location =br.readLine();
+     br.readLine();
+     String boolvalue = br.readLine();
+     Boolean cpaid = Boolean.parseBoolean(boolvalue);
+
+     Citation currentciation = new Citation(ticketnumber, CarMake, CarModel, CarYear, PermitNum, LicenseNum, State, Color, ViolationType, Date, Time, Issuer, Location, cpaid);
+      CitationDataModel.setCurrentUser(currentciation);
+    
+         count++;
+      centerGUI.clearFields();
+                                  
+                           
+     
+            
+      
+         
+     }
+                             
+                           	    
+			
+        in.close();
+		                                             
+		}
+                                    
+                                        catch (Exception e) {
+		}
+               
+	
+	  // System.out.println(count);
+			
+			}
+				
+			}
+
+		);
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                /**
+         * this button will clear all of the content of the specified outputfile
+         */
           
           
-          
-          
+          	centerGUI.getClrdataBTN().setOnAction(
+			new EventHandler<ActionEvent>()
+			{
+			@Override
+			public void handle(ActionEvent event) 
+			{
+			 //set the fields
+			CitationDataModel.cleardata();
+                        centerGUI.clearFields();
+                        centerGUI.getMyLabel().clear();
+			
+			}
+				
+			}
+
+		);
+                
           
         
            

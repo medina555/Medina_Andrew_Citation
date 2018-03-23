@@ -29,6 +29,76 @@ import java.util.ArrayList;
 public class centerGUI extends GridPane{
 
     /**
+     * @return the printAllBTN
+     */
+    public Button getPrintAllBTN() {
+        return printAllBTN;
+    }
+
+    /**
+     * @param printAllBTN the printAllBTN to set
+     */
+    public void setPrintAllBTN(Button printAllBTN) {
+        this.printAllBTN = printAllBTN;
+    }
+
+    /**
+     * @return the storecurrentBTN
+     */
+    public Button getStorecurrentBTN() {
+        return storecurrentBTN;
+    }
+
+    /**
+     * @param storecurrentBTN the storecurrentBTN to set
+     */
+    public void setStorecurrentBTN(Button storecurrentBTN) {
+        this.storecurrentBTN = storecurrentBTN;
+    }
+
+    /**
+     * @return the readBTN
+     */
+    public Button getReadBTN() {
+        return readBTN;
+    }
+
+    /**
+     * @param readBTN the readBTN to set
+     */
+    public void setReadBTN(Button readBTN) {
+        this.readBTN = readBTN;
+    }
+
+    /**
+     * @return the ClrdataBTN
+     */
+    public Button getClrdataBTN() {
+        return ClrdataBTN;
+    }
+
+    /**
+     * @param ClrdataBTN the ClrdataBTN to set
+     */
+    public void setClrdataBTN(Button ClrdataBTN) {
+        this.ClrdataBTN = ClrdataBTN;
+    }
+
+    /**
+     * @return the storeallBTN
+     */
+    public Button getStoreallBTN() {
+        return storeallBTN;
+    }
+
+    /**
+     * @param storeallBTN the storeallBTN to set
+     */
+    public void setStoreallBTN(Button storeallBTN) {
+        this.storeallBTN = storeallBTN;
+    }
+
+    /**
      * @return the exitBtn
      */
     public Button getExitBtn() {
@@ -773,13 +843,17 @@ public class centerGUI extends GridPane{
         
     public TextArea myLabel= new TextArea("");
     private Button printBTN = new Button("Print Citation");
+     private Button printAllBTN = new Button("Print All Data");
     private Button addBTN = new Button("Add Citation");
     private Button leftBTN = new Button("<<");
     private Button rightBTN = new Button(">>");
     private Button deleteBTN = new Button("Delete Citation");
     private Button payBTN = new Button ("Set Citation to Paid");
       private Button unpayBTN = new Button ("Set Citation to Unpaid");
-      
+      private Button storeallBTN = new Button("Store all Citation Data");
+       private Button storecurrentBTN = new Button("Store the current citation");
+       private Button ClrdataBTN = new Button("Clear all Data in tickets.dat file");
+         private Button readBTN = new Button("Read All Data from tickets.dat File");
      private Button exitBtn = new Button("Exit");
       
     private int CitationIndex = 0; 
@@ -787,7 +861,13 @@ public class centerGUI extends GridPane{
    private String FB;
     private int CitationNum = 1;
         
-              
+      /** 
+      * displays the current citation in the citationlist, if the list is not empty, it is 
+      * mostly used to display the latest citation entry
+      * 
+     * @param citlist1 the current citation list
+     * @param index the current index of the citlist1
+     */   
       public void currentCitation(ArrayList<Citation> citlist1, int index)
     {
      
@@ -819,10 +899,14 @@ public class centerGUI extends GridPane{
     
         
    
+         /** 
+      * bool function that returns a specified string depending on whether or not the ticket is paid
+     * @param stat the boolean variable that is set to true or false depending on wheter the ticket is paid or not 
+     * @return temp the string in which is decided on the value of stat
+     */ 
         
         
-        
-        //bool function that returns wheter the ticket is paid or unpaid 
+       
         
         public String cStatus(boolean stat)
         {
@@ -838,7 +922,9 @@ public class centerGUI extends GridPane{
             return temp; 
         }
         
-        
+        /**
+         * this method clears the textfields so that new data can be added 
+         */
 public void clearFields()
 	{
 		       CarMakeTF.clear();
@@ -853,10 +939,23 @@ public void clearFields()
                  TimeTF.clear();
                  IssuerTF.clear();
                  LocationTF.clear();
+                 DisplayText.clear();
                  getFeedBackArea().clear();
 	}
         
-        
+
+
+
+
+
+
+
+
+
+
+        /**
+         * this method clears the main display label so that new data can be shown
+         */
 
 public void clearDisplayLabel()
 {
@@ -884,7 +983,9 @@ public void clearDisplayLabel()
         private HBox hboxform8 = new HBox(10);
         private int myCstatus = 0; 
         private boolean ispaid = false; //by default the ticket is set to upaid 
-        
+        /**
+         * this consturctor the the centerGUI is where all the vbox,hbox,buttons,labels are set
+         */
  public centerGUI()
  {
        //this lambda action event will close the program 
@@ -947,7 +1048,7 @@ public void clearDisplayLabel()
    myLabel.setPrefHeight(300);
    
      vboxform.getChildren().addAll(myLabel,hboxform);
-     buttonvbox.getChildren().addAll(printBTN,addBTN,deleteBTN,payBTN,unpayBTN,exitBtn);
+     buttonvbox.getChildren().addAll(printBTN,printAllBTN,addBTN,deleteBTN,payBTN,unpayBTN,exitBtn,readBTN);
     
      this.addRow(1,buttonvbox);
      this.add(vboxform1,1,1);

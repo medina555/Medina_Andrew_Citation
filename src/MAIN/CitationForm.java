@@ -1,7 +1,6 @@
 /*
+ * @author Andrew Medina
  * 
- * 
- * This Project was made by Andrew Medina
  */
 package MAIN;
 
