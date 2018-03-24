@@ -870,6 +870,7 @@ public class centerGUI extends GridPane{
      */   
       public void currentCitation(ArrayList<Citation> citlist1, int index)
     {
+       
      
         if(!citlist1.isEmpty())
         {

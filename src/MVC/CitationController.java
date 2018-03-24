@@ -88,9 +88,9 @@ public class CitationController {
                     // currentlist = CitationDataModel.getCitList();
 			
                          centerGUI.setCitationIndex(0);
-                         centerGUI.currentCitation(currentList,centerGUI.getCitationIndex());
+                         centerGUI.currentCitation(currentList,0);
                         // centerGUI.getMyLabel().setText("test");
-                         System.out.println(currentList.get(1).getCarYear());
+                        
                    
                        
                      
@@ -362,8 +362,7 @@ public class CitationController {
       int ticketnumber = Integer.parseInt(tn);//ticket number for citation
           br.readLine();
         
-     String PermitNum =br.readLine();  //the permit number of the vehicle (if they have one)
-      br.readLine();
+ 
      
       String CarMake = br.readLine();  // the make of the vehicle
        br.readLine();
@@ -371,7 +370,8 @@ public class CitationController {
        br.readLine();
       String CarYear = br.readLine(); 
       br.readLine();
-      // the year of the vehicle
+          String PermitNum =br.readLine();  //the permit number of the vehicle (if they have one)
+      br.readLine();// the year of the vehicle
      String LicenseNum = br.readLine();
         br.readLine();//the licenseplate number of the vehicle
      String State = br.readLine();
