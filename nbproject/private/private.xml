@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Andrew/Documents/Medina_Andrew_CitationMVC/src/CITATIONDATA/Citation.java</file>
-            <file>file:/C:/Users/Andrew/Documents/Medina_Andrew_CitationMVC/src/MAIN/CitationForm.java</file>
-            <file>file:/C:/Users/Andrew/Documents/Medina_Andrew_CitationMVC/src/CITATIONDATA/CitationDataModel.java</file>
-            <file>file:/C:/Users/Andrew/Documents/Medina_Andrew_CitationMVC/src/GUI/centerGUI.java</file>
-            <file>file:/C:/Users/Andrew/Documents/Medina_Andrew_CitationMVC/src/GUI/TitleGUI.java</file>
-            <file>file:/C:/Users/Andrew/Documents/Medina_Andrew_CitationMVC/src/MVC/CitationController.java</file>
-            <file>file:/C:/Users/Andrew/Documents/Medina_Andrew_CitationMVC/src/GUI/rightGUI.java</file>
+            <file>file:/C:/Users/Andrew/Desktop/Medina_Andrew_Citation/src/CITATIONDATA/CitationDataModel.java</file>
+            <file>file:/C:/Users/Andrew/Desktop/Medina_Andrew_Citation/src/MVC/CitationController.java</file>
+            <file>file:/C:/Users/Andrew/Desktop/Medina_Andrew_Citation/src/GUI/TitleGUI.java</file>
+            <file>file:/C:/Users/Andrew/Desktop/Medina_Andrew_Citation/src/GUI/centerGUI.java</file>
+            <file>file:/C:/Users/Andrew/Desktop/Medina_Andrew_Citation/src/MAIN/CitationForm.java</file>
+            <file>file:/C:/Users/Andrew/Desktop/Medina_Andrew_Citation/src/CITATIONDATA/Citation.java</file>
+            <file>file:/C:/Users/Andrew/Desktop/Medina_Andrew_Citation/src/DATABASE/Database.java</file>
         </group>
     </open-files>
 </project-private>

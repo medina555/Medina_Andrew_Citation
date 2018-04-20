@@ -29,6 +29,34 @@ import java.util.ArrayList;
 public class centerGUI extends GridPane{
 
     /**
+     * @return the TicketNum
+     */
+    public Label getTicketNum() {
+        return TicketNum;
+    }
+
+    /**
+     * @param TicketNum the TicketNum to set
+     */
+    public void setTicketNum(Label TicketNum) {
+        this.TicketNum = TicketNum;
+    }
+
+    /**
+     * @return the TicketNumTF
+     */
+    public TextField getTicketNumTF() {
+        return TicketNumTF;
+    }
+
+    /**
+     * @param TicketNumTF the TicketNumTF to set
+     */
+    public void setTicketNumTF(TextField TicketNumTF) {
+        this.TicketNumTF = TicketNumTF;
+    }
+
+    /**
      * @return the printAllBTN
      */
     public Button getPrintAllBTN() {
@@ -169,17 +197,17 @@ public class centerGUI extends GridPane{
     }
 
     /**
-     * @return the deleteBTN
+     * @return the clearBTN
      */
-    public Button getDeleteBTN() {
-        return deleteBTN;
+    public Button getClearBTN() {
+        return clearBTN;
     }
 
     /**
-     * @param deleteBTN the deleteBTN to set
+     * @param clearBTN the clearBTN to set
      */
-    public void setDeleteBTN(Button deleteBTN) {
-        this.deleteBTN = deleteBTN;
+    public void setClearBTN(Button clearBTN) {
+        this.clearBTN = clearBTN;
     }
 
     /**
@@ -793,8 +821,8 @@ public class centerGUI extends GridPane{
     
        // private Label Title = new Label("Parking Citation Form");
        
-       
-        
+       private Label TicketNum = new Label ("Ticket Number:");
+         private TextField TicketNumTF = new TextField();
         private Label PermitNum = new Label("Permit Number");
         private TextField PermitNumTF = new TextField();
         
@@ -847,13 +875,13 @@ public class centerGUI extends GridPane{
     private Button addBTN = new Button("Add Citation");
     private Button leftBTN = new Button("<<");
     private Button rightBTN = new Button(">>");
-    private Button deleteBTN = new Button("Delete Citation");
+    private Button clearBTN = new Button("Clear All Text ");
     private Button payBTN = new Button ("Set Citation to Paid");
       private Button unpayBTN = new Button ("Set Citation to Unpaid");
       private Button storeallBTN = new Button("Store all Citation Data");
-       private Button storecurrentBTN = new Button("Store the current citation");
-       private Button ClrdataBTN = new Button("Clear all Data in tickets.dat file");
-         private Button readBTN = new Button("Read All Data from tickets.dat File");
+       private Button storecurrentBTN = new Button("Add/Store Ticket to DB");
+       private Button ClrdataBTN = new Button("Clear All Text");
+         private Button readBTN = new Button("Read/Print All Data From Database");
      private Button exitBtn = new Button("Exit");
       
     private int CitationIndex = 0; 
@@ -875,7 +903,7 @@ public class centerGUI extends GridPane{
         if(!citlist1.isEmpty())
         {
             
-            myLabel.setText("Citation Number: " + (CitationIndex + 1)+"\n"+   
+            myLabel.setText("Citation Number: " + citlist1.get(index).getTicketnumber()+"\n"+   
                                                 "Vehicle Make: " +citlist1.get(index).getCarMake() +"\n" +
                                                 "Vehicle Model: " +citlist1.get(index).getCarModel() +"\n"+
                                                 "Vehicle Year: " +citlist1.get(index).getCarYear()+"\n"+
@@ -941,11 +969,38 @@ public void clearFields()
                  IssuerTF.clear();
                  LocationTF.clear();
                  DisplayText.clear();
+                 TicketNumTF.clear();
+                 myLabel.clear();
                  getFeedBackArea().clear();
 	}
         
 
-
+public void emptyFields()
+	{
+		    if( 
+                            TicketNumTF.getText().isEmpty()||
+                             CarMakeTF.getText().isEmpty() ||
+                 CarModelTF.getText().isEmpty() ||
+                 CarYearTF.getText().isEmpty() ||
+                 PermitNumTF.getText().isEmpty() ||
+                 LNumberTF.getText().isEmpty() ||
+                 StateTF.getText().isEmpty() ||
+                 ColorTF.getText().isEmpty() ||
+                 ViolationTypeTF.getText().isEmpty() ||
+                 DateTF.getText().isEmpty() ||
+                 TimeTF.getText().isEmpty() ||
+                 IssuerTF.getText().isEmpty() ||
+                 LocationTF.getText().isEmpty() 
+                 
+                 
+              
+                
+                         )
+                        
+                    {
+                        myLabel.setText("Error One or more of the fields were left blank!!");
+                    }
+	}
 
 
 
@@ -1036,7 +1091,7 @@ public void clearDisplayLabel()
      hboxform.getChildren().addAll(leftBTN,rightBTN);
    
       //i set up two vboxes that hold all the labels and text fields
-      vboxform1.getChildren().addAll(CarMake,CarMakeTF,CarYear,CarYearTF,PermitNum,PermitNumTF,State,StateTF,Date,DateTF,ViolationType,ViolationTypeTF);
+      vboxform1.getChildren().addAll(TicketNum,TicketNumTF,CarMake,CarMakeTF,CarYear,CarYearTF,PermitNum,PermitNumTF,State,StateTF,Date,DateTF,ViolationType,ViolationTypeTF);
       vboxform2.getChildren().addAll(CarModel,CarModelTF,LNumber,LNumberTF,Color,ColorTF,Issuer,IssuerTF,Time,TimeTF,Location,LocationTF,FeedBack,FeedBackArea);
       
       
@@ -1049,7 +1104,7 @@ public void clearDisplayLabel()
    myLabel.setPrefHeight(300);
    
      vboxform.getChildren().addAll(myLabel,hboxform);
-     buttonvbox.getChildren().addAll(printBTN,printAllBTN,addBTN,deleteBTN,payBTN,unpayBTN,exitBtn,readBTN);
+     buttonvbox.getChildren().addAll(printBTN,storecurrentBTN,payBTN,unpayBTN,exitBtn,readBTN,ClrdataBTN);
     
      this.addRow(1,buttonvbox);
      this.add(vboxform1,1,1);

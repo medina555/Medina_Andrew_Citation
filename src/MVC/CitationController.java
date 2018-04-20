@@ -7,6 +7,7 @@ package MVC;
 
 import CITATIONDATA.Citation;
 import CITATIONDATA.CitationDataModel;
+import DATABASE.Database;
 import GUI.centerGUI;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,6 +16,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
+import java.sql.*;
 
 
 /**
@@ -24,6 +26,7 @@ import javafx.scene.control.TextArea;
 public class CitationController {
     centerGUI centerGUI;
     CitationDataModel CitationDataModel;
+    Database mydb; 
    
   
     
@@ -43,7 +46,7 @@ public class CitationController {
              @Override
              public void handle (ActionEvent event)
              {
-     int ticketnumber = 0;  //ticket number for citation
+     int ticketnumber = Integer.parseInt(centerGUI.getTicketNumTF().getText());  //ticket number for citation
      String PermitNum = centerGUI.getPermitNumTF().getText();  //the permit number of the vehicle (if they have one)
      String CarMake = centerGUI.getCarMakeTF().getText();   // the make of the vehicle
      String CarModel = centerGUI.getCarModelTF().getText();  // the model of the vehicle
@@ -64,7 +67,7 @@ public class CitationController {
              	CitationDataModel.setCurrentUser(currentCit);
                 
 		centerGUI.clearFields();
-                CitationDataModel.storeTicketObject(currentCit);
+            
                 
     
          }
@@ -114,7 +117,7 @@ public class CitationController {
                     ArrayList<Citation> citlist1 = CitationDataModel.getCitList();
 	                       for(int i = 0 ; i< citlist1.size();i++){
    	
-                                centerGUI.myLabel.appendText(  "Ticket Number:" + (i +1) +
+                                centerGUI.myLabel.appendText(  "Ticket Number:" + citlist1.get(i).getTicketnumber() +
                                             "Vehicle Make: " +citlist1.get(i).getCarMake() +"\n" +
                                                 "Vehicle Model: " +citlist1.get(i).getCarModel() +"\n"+
                                                 "Vehicle Year: " +citlist1.get(i).getCarYear()+"\n"+
@@ -264,39 +267,37 @@ public class CitationController {
                 
         );
         
+      
+            centerGUI.getUnpayBTN().setOnAction(
+             new EventHandler <ActionEvent>()
+             {
+                 @Override
+                 public void handle(ActionEvent event)
+                 {
+                      ArrayList<Citation> currentList = CitationDataModel.getCitList();
+                    if(!currentList.isEmpty()){
+                       currentList.get(centerGUI.getCitationIndex()).setCpaid(false);
+                       centerGUI.currentCitation(currentList,centerGUI.getCitationIndex());
+                    // currentCitation(getCitationIndex());
+                    }
+                     
+                 }
+                 
+             
+             }
+                
+        );
+      
      
           
               
-        centerGUI.getDeleteBTN().setOnAction(
+        centerGUI.getClrdataBTN().setOnAction(
                new EventHandler<ActionEvent>()
                {
                    @Override
                    public void handle (ActionEvent event)
                    {
-                        ArrayList<Citation> currentList = CitationDataModel.getCitList();
-                     if(!currentList.isEmpty())
-                     {int value = centerGUI.getCitationIndex();
-                         if(centerGUI.getCitationIndex()>0)
-                         {    
-                         currentList.remove(value);
-                        centerGUI.clearDisplayLabel();
-                        centerGUI.setCitationIndex(value-1);
-                        
-                             centerGUI.currentCitation(currentList,centerGUI.getCitationIndex());
-                         }
-                         
-                         if(value==0)
-                         {    
-                         currentList.remove(value);
-                          centerGUI.clearDisplayLabel();
-                           centerGUI.currentCitation(currentList,centerGUI.getCitationIndex());
-                         }
-                         
-                     }
-                    
-                    
-                       if(currentList.isEmpty())
-                       {centerGUI.getMyLabel().setText("There are no more tickets!!!");}
+                      centerGUI.clearFields();
                        
                    }
                }
@@ -305,16 +306,74 @@ public class CitationController {
           
           
           
-          	centerGUI.getStoreallBTN().setOnAction(
+          	centerGUI.getStorecurrentBTN().setOnAction(
 			new EventHandler<ActionEvent>()
 			{
 			@Override
 			public void handle(ActionEvent event) 
 			{
-			 //set the fields
-			ArrayList<Citation> clist = CitationDataModel.getCitList();
-			      System.out.println("it worked");
-			CitationDataModel.storeticketObjects(clist);
+                            centerGUI.emptyFields();
+			 //set int idnum = 0; 
+                 Database mydb =  Database.getSingletonOfdatabase();
+                 ArrayList<Citation> citlist1 = CitationDataModel.getCitList();
+                                 int ticketnumber = Integer.parseInt(centerGUI.getTicketNumTF().getText());  //ticket number for citation
+     String PermitNum = centerGUI.getPermitNumTF().getText();  //the permit number of the vehicle (if they have one)
+     String CarMake = centerGUI.getCarMakeTF().getText();   // the make of the vehicle
+     String CarModel = centerGUI.getCarModelTF().getText();  // the model of the vehicle
+     String CarYear = centerGUI.getCarYearTF().getText();   // the year of the vehicle
+     String LicenseNum = centerGUI.getLNumberTF().getText(); //the licenseplate number of the vehicle
+     String State = centerGUI.getStateTF().getText();    // the state that the licenseplate belongs to
+     String Color = centerGUI.getColorTF().getText();    // the color of the vehicle
+     String ViolationType = centerGUI.getViolationTypeTF().getText(); //the violation type that occured 
+     String Date = centerGUI.getDateTF().getText();
+     String Time = centerGUI.getTimeTF().getText();
+     String Issuer = centerGUI.getIssuerTF().getText();
+     String Location = centerGUI.getLocationTF().getText(); 
+     Boolean cpaid = false;
+                Citation currentCit = new Citation(ticketnumber,CarMake,CarModel,CarYear,PermitNum,LicenseNum,
+                                                    State,Color,ViolationType,Date,Time,Issuer,Location,cpaid);
+                  String FB = centerGUI.getFeedBackArea().getText();
+              
+             	CitationDataModel.setCurrentUser(currentCit);
+                
+		centerGUI.clearFields();
+                
+               
+                 try {   
+                      Connection conn = mydb.getConn();
+                      PreparedStatement mystmt = conn.prepareStatement("INSERT into citations VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                      ResultSet myrs = mydb.getMyRs();
+                      while (myrs.next())
+                      {
+                          if (citlist1.get(centerGUI.getCitationIndex()).getTicketnumber()== myrs.getInt("ticketnumber"))
+                          {
+                              centerGUI.getMyLabel().setText("There already exists a ticket with primarykey(ticketnumber)" + myrs.getInt("ticketnumber") + "in the database");
+                              break;
+                          }
+                      }
+                      myrs.beforeFirst();
+                      mystmt.setInt(1, citlist1.get(centerGUI.getCitationIndex()).getTicketnumber());
+                      mystmt.setString(2, citlist1.get(centerGUI.getCitationIndex()).getCarMake());
+                      mystmt.setString(3, citlist1.get(centerGUI.getCitationIndex()).getCarModel());
+                      mystmt.setString(4, citlist1.get(centerGUI.getCitationIndex()).getCarYear());
+                      mystmt.setString(5, citlist1.get(centerGUI.getCitationIndex()).getPermitNum());
+                      mystmt.setString(6, citlist1.get(centerGUI.getCitationIndex()).getLicenseNum());
+                      mystmt.setString(7, citlist1.get(centerGUI.getCitationIndex()).getState());
+                      mystmt.setString(8, citlist1.get(centerGUI.getCitationIndex()).getColor());
+                      mystmt.setString(9, citlist1.get(centerGUI.getCitationIndex()).getViolationType());
+                      mystmt.setString(10, citlist1.get(centerGUI.getCitationIndex()).getDate());
+                      mystmt.setString(11, citlist1.get(centerGUI.getCitationIndex()).getTime());
+                      mystmt.setString(12, citlist1.get(centerGUI.getCitationIndex()).getIssuer());
+                      mystmt.setString(13, citlist1.get(centerGUI.getCitationIndex()).getLocation());
+                      mystmt.setString(14, centerGUI.cStatus(citlist1.get(centerGUI.getCitationIndex()).getCpaid()));
+                     
+                
+                     mystmt.executeUpdate();
+                 } catch (Exception e) {
+                     
+                 }
+               
+			
 			}
 				
 			}
@@ -346,56 +405,106 @@ public class CitationController {
 			@Override
 			public void handle(ActionEvent event) 
 			{
+                            centerGUI.clearFields();
+                            Database mydb = CitationDataModel.getMydatabase();
+                           
+                               try
+                 {
+                      boolean exist = false; 
+                             centerGUI.clearFields();
+                    
+                     ResultSet myRs = mydb.getMyRs();
+                         while(myRs.next())
+                     {
+                         System.out.println("IT worked");
+                         
+                         System.out.println(myRs.getInt("ticketnumber"));
+                         int ticketnumber = myRs.getInt("ticketnumber");
+                         for (int i = 0; i < CitationDataModel.getCitList().size(); i++) 
+                         {
+                             if (myRs.getInt("ticketnumber")==CitationDataModel.getCitList().get(i).getTicketnumber())
+                             {
+                                 exist = true;
+                              
+                             }
+                         }
+                         String CarMake = myRs.getString("CarMake");
+                         String CarModel = myRs.getString("CarModel");
+                         String CarYear = myRs.getString("CarYear");
+                         String PermitNum = myRs.getString("PermitNum");
+                         String LicenseNum = myRs.getString("LicenseNum");
+                         String State = myRs.getString("State");
+                         String Color = myRs.getString("Color");
+                         String ViolationType = myRs.getString("ViolationType");
+                         String Date = myRs.getString("TDate");
+                         String Time = myRs.getString("TTime");
+                         String Issuer = myRs.getString("Issuer");
+                         String Location = myRs.getString("Location");
+                         boolean cpaid =false; 
+                         if (myRs.getString("TStatus").equals("Citation is Unpaid"))
+                         {
+                              cpaid = false;
+                         }
+                         else 
+                         {
+                              cpaid = true; 
+                         }
+                          
+                           
+                                     
+                                     
+                            
+                            
+                    
+                         
+                        
+                        
+                              if(exist==true)
+                              {
+                                    centerGUI.getMyLabel().appendText("There already exists a ticket with ticketnumber" + myRs.getInt("ticketnumber")+ "in the local list!!\n");
+                                   exist =false; 
+                              }
+                              
+                              if (exist ==false){
+                                                          Citation currentciation = new Citation(ticketnumber, CarMake, CarModel, CarYear, PermitNum, LicenseNum, State, Color, ViolationType, Date, Time, Issuer, Location, cpaid);
+                                                          CitationDataModel.setCurrentUser(currentciation);
+                               centerGUI.getMyLabel().appendText(
+                                   "Citation Number: " + ticketnumber +"\n"+   
+                                                "Vehicle Make: " +CarMake +"\n" +
+                                                "Vehicle Model: " +CarModel +"\n"+
+                                                "Vehicle Year: " +CarYear+"\n"+
+                                       
+                                                "Permit Number: " +PermitNum+"\n"+ 
+                                                "License Plate Number: " +LicenseNum+"\n"+
+                                                
+                                                "Vehicle State: " +State+"\n"+
+                                                "Vehicle Color: " +Color+"\n"+
+                                                "Date of Citation: " +Date+"\n"+
+                                                "Time of Citation: " +Time+"\n"+
+                                                "Issuer of Citation: " +Issuer+"\n"+
+                                                "Location of Citation: " +Location+"\n"+
+                                                "Violation: " +ViolationType+"\n"+
+                                                 centerGUI.cStatus(cpaid) +"\n" +
+                                                 "Feedback Information: " + "\n");
+                              }
+                            
+                     }
+                         myRs.beforeFirst();
+                 }
+                         catch(Exception e){}
+                  
+                     
+                 }
+                        }
+                  );
+                            
 			 //set the fields
-			int count = 0;      
-                         String alldata = "";
-	
-		           		try {
-	FileReader in= new FileReader("tickets.dat");
-       BufferedReader br = new BufferedReader(in);
-       
-  String line;
- 
 
-     while((line = br.readLine()) != null){
-      String tn = br.readLine();
-      int ticketnumber = Integer.parseInt(tn);//ticket number for citation
-          br.readLine();
-        
- 
+
      
-      String CarMake = br.readLine();  // the make of the vehicle
-       br.readLine();
-      String CarModel = br.readLine();  // the model of the vehicle
-       br.readLine();
-      String CarYear = br.readLine(); 
-      br.readLine();
-          String PermitNum =br.readLine();  //the permit number of the vehicle (if they have one)
-      br.readLine();// the year of the vehicle
-     String LicenseNum = br.readLine();
-        br.readLine();//the licenseplate number of the vehicle
-     String State = br.readLine();
-     br.readLine();// the state that the licenseplate belongs to
-     String Color = br.readLine();
-     br.readLine();// the color of the vehicle
-     String ViolationType = br.readLine();
-     br.readLine();//the violation type that occured 
-     String Date = br.readLine();
-     br.readLine();
-     String Time = br.readLine();
-     br.readLine();
-     String Issuer = br.readLine();
-     br.readLine();
-     String Location =br.readLine();
-     br.readLine();
-     String boolvalue = br.readLine();
-     Boolean cpaid = Boolean.parseBoolean(boolvalue);
-
-     Citation currentciation = new Citation(ticketnumber, CarMake, CarModel, CarYear, PermitNum, LicenseNum, State, Color, ViolationType, Date, Time, Issuer, Location, cpaid);
-      CitationDataModel.setCurrentUser(currentciation);
     
-         count++;
-      centerGUI.clearFields();
+         
+   
                                   
                            
      
@@ -406,22 +515,9 @@ public class CitationController {
                              
                            	    
 			
-        in.close();
+      
 		                                             
-		}
-                                    
-                                        catch (Exception e) {
-		}
-               
-	
-	  // System.out.println(count);
-			
-			}
-				
-			}
-
-		);
-                
+		
                 
                 
                 
@@ -437,22 +533,7 @@ public class CitationController {
          */
           
           
-          	centerGUI.getClrdataBTN().setOnAction(
-			new EventHandler<ActionEvent>()
-			{
-			@Override
-			public void handle(ActionEvent event) 
-			{
-			 //set the fields
-			CitationDataModel.cleardata();
-                        centerGUI.clearFields();
-                        centerGUI.getMyLabel().clear();
-			
-			}
-				
-			}
-
-		);
+          
                 
           
         
@@ -468,4 +549,4 @@ public class CitationController {
         }
     
     
-}
+
