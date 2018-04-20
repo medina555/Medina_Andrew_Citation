@@ -1,0 +1,6 @@
+Add/Store Ticket to DB = requires none of the text fields (besides feedback) to be blank and the Ticket Number (primary key) to not exist in the database
+
+The read/print all from database  button will read from the database and will display all info from database
+
+print citation will print citation starting from first record in database after it had been read of course
+

@@ -1,4 +1,0 @@
-Add citation button now also writes/appends to ticket.dat file as well as adds to the arraylist
-The read button will read from the tickets.dat file and add them to the arraylist
-print citation will print citation starting from first citation in the arraylist
-print all will print all the citations currently in the ticket.dat file
